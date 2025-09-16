@@ -23,8 +23,77 @@
 
         </div>
         <script>
-            function getData() {
- 
+            async function getData() {
+                try {
+                    const url = "/data";
+                    var t = document.getElementById("type").value;
+                    var l = document.getElementById("limit").value;
+                    const response = await axios.get(url, {
+                        params: {
+                            type : t,
+                            limit : l
+                        }
+                    })
+
+                    // Get Result div
+                    const resultElem = document.getElementById("result");
+
+                    // Clear past data
+                    while (resultElem.firstChild) {
+                        resultElem.removeChild(resultElem.lastChild);
+                    }
+
+                    // Category Heading Text
+                    const category = response.data.type;
+                    const headerElem = document.createElement("h2");
+                    const headerText = document.createTextNode(category);
+                    headerElem.appendChild(headerText);
+                    resultElem.appendChild(headerElem);
+
+                    // Get Data from Database
+                    const data = Object.values(response.data.records);
+                    const headers = Object.keys(response.data.records[0])
+
+                    // Create Table Element
+                    const tableElem = document.createElement("table");
+                    const tbodyElem = document.createElement("tbody");
+
+                    // Table Header Row
+                    const tableHeaderRowElem = document.createElement("tr")
+
+                    for (header of headers) {
+                        //console.log(header);
+                        const tableHeaderDataElem = document.createElement("th")
+                        const headerTextNode = document.createTextNode(header);
+                        tableHeaderDataElem.appendChild(headerTextNode);
+                        tableHeaderRowElem.appendChild(tableHeaderDataElem);
+                    }
+
+                    tbodyElem.appendChild(tableHeaderRowElem);
+
+                    // Table Data
+                    for (obj of data) {
+                        //console.log(obj)
+                        const trElem = document.createElement("tr");
+                        for (value of Object.values(obj)) {
+                            const tdElem = document.createElement("td")
+                            const tdText = document.createTextNode(value);
+                            tdElem.appendChild(tdText);
+                            trElem.appendChild(tdElem);
+                        }
+
+                        // Add row to table
+                        tbodyElem.appendChild(trElem);
+                    }
+
+                    // Add table to div
+                    tableElem.appendChild(tbodyElem);
+                    resultElem.appendChild(tableElem);
+
+                }
+                catch(err) {
+                    console.log(err);
+                }
             }
 
         </script>
