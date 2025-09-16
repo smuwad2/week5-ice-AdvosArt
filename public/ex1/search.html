@@ -35,10 +35,8 @@
                     const suggestElem = document.getElementById("suggestions");
                     const textNode = document.createTextNode(response.data);
                     
-                    if (suggestElem.childNodes.length != 0) {
-                        for (node of suggestElem.childNodes) {
-                            suggestElem.removeChild(node);
-                        }
+                    while (suggestElem.firstChild) {
+                        suggestElem.removeChild(suggestElem.lastChild);
                     }
 
                     suggestElem.appendChild(textNode);
