@@ -85,6 +85,8 @@
                     items = items.concat(Object.values(response.data));
                 }
 
+            } else if (cat === "0") {
+                items = null;
             } else {
                 const response = await axios.get(url, {
                     params: {
@@ -105,19 +107,25 @@
             
             // Get itemsList div
             const itemsListElem = document.getElementById("itemsList");
-            itemsListElem.setAttribute("class", "container-fluid justify-content-center row-cols-3") // bootstrap
+            itemsListElem.setAttribute("class", "container d-flex justify-content-evenly row row-cols-lg-3 row-cols-md-2 row-cols-sm-1") // bootstrap
 
             // Clear past data
             while (itemsListElem.firstChild) {
                 itemsListElem.removeChild(itemsListElem.lastChild);
             }
-            const pElem = document.createElement("p");
-            pElem.setAttribute("class", "text-center");
-            itemsListElem.appendChild(pElem);
 
-            for (itemObj of items) {
-                const itemElem = createItemCard(itemObj);
-                itemsListElem.appendChild(itemElem);
+            // Nothing selected
+            if (items === null) {
+                const pElem = document.createElement("p");
+                const pText = document.createTextNode("No items")
+                pElem.appendChild(pText);
+                pElem.setAttribute("class", "text-center");
+                itemsListElem.appendChild(pElem);
+            } else {
+                for (itemObj of items) {
+                    const itemElem = createItemCard(itemObj);
+                    itemsListElem.appendChild(itemElem);
+                }
             }
         }
 
